@@ -17,6 +17,16 @@ let filteredProperties = [...allProperties];
 // INITIALIZE PAGE
 // ===================================
 document.addEventListener('DOMContentLoaded', () => {
+    // Hero Background Slider
+    const slides = document.querySelectorAll('.hero-slide');
+    if (slides.length > 0) {
+        let currentSlide = 0;
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 5000); // Change every 5 seconds
+    }
     // Check for URL parameters
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -175,9 +185,9 @@ function displayProperties() {
     if (paginatedProperties.length === 0) {
         container.innerHTML = `
             <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
-                <i class="fas fa-home" style="font-size: 4rem; color: #c9a961; margin-bottom: 1rem;"></i>
-                <h3 style="color: #1a2332; margin-bottom: 0.5rem;">No Properties Found</h3>
-                <p style="color: #666;">Try adjusting your filters to see more results</p>
+                <i class="fas fa-home" style="font-size: 4rem; color: var(--secondary-color); margin-bottom: 1rem;"></i>
+                <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; font-family: var(--font-heading);">No Properties Found</h3>
+                <p style="color: var(--text-light);">Try adjusting your filters to see more results</p>
                 <button class="btn btn-primary" onclick="resetFilters()" style="margin-top: 1rem;">
                     Reset Filters
                 </button>

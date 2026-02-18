@@ -190,9 +190,57 @@ const properties = [
         bathrooms: 0,
         area: 3200,
         parking: 0,
-        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&h=500&fit=crop",
+        image: "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?w=800&h=500&fit=crop",
         badge: "Commercial",
         featured: false
+    },
+    {
+        id: 13,
+        title: "Modern 3BHK Apartment",
+        location: "Sector 150, Noida",
+        city: "noida",
+        price: 14500000,
+        priceText: "₹1.45 Cr",
+        type: "apartment",
+        bedrooms: 3,
+        bathrooms: 3,
+        area: 1750,
+        parking: 2,
+        image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=500&fit=crop",
+        badge: "New Launch",
+        featured: true
+    },
+    {
+        id: 14,
+        title: "Luxury Beachfront Villa",
+        location: "Candolim, Goa",
+        city: "goa",
+        price: 85000000,
+        priceText: "₹8.5 Cr",
+        type: "villa",
+        bedrooms: 5,
+        bathrooms: 5,
+        area: 4800,
+        parking: 3,
+        image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=500&fit=crop",
+        badge: "Premium",
+        featured: true
+    },
+    {
+        id: 15,
+        title: "High-rise 4BHK",
+        location: "Golf Course Road, Gurgaon",
+        city: "gurgaon",
+        price: 55000000,
+        priceText: "₹5.5 Cr",
+        type: "apartment",
+        bedrooms: 4,
+        bathrooms: 4,
+        area: 3500,
+        parking: 2,
+        image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=500&fit=crop",
+        badge: "Ready to Move",
+        featured: true
     }
 ];
 
@@ -207,6 +255,19 @@ if (hamburger) {
         navMenu.classList.toggle('active');
     });
 }
+
+// ===================================
+// PRELOADER
+// ===================================
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        setTimeout(() => {
+            preloader.classList.add('fade-out');
+            document.body.style.overflow = 'auto'; // Ensure usage
+        }, 1500); // 1.5s delay for effect
+    }
+});
 
 // Close menu when clicking on a link
 document.querySelectorAll('.nav-link').forEach(link => {
@@ -273,13 +334,32 @@ function createPropertyCard(property) {
                     <div class="property-price">
                         ${property.priceText}
                     </div>
-                    <button class="btn btn-primary" onclick="event.stopPropagation(); openInquiryModal()">
-                        Inquire
-                    </button>
+                    <div class="footer-actions">
+                        <button class="wishlist-btn" onclick="toggleWishlist(event, this)" title="Add to Wishlist">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button class="btn btn-primary" onclick="event.stopPropagation(); openInquiryModal()">
+                            Inquire
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     `;
+}
+
+// Toggle Wishlist
+function toggleWishlist(event, btn) {
+    event.stopPropagation();
+    btn.classList.toggle('active');
+    const icon = btn.querySelector('i');
+    if (btn.classList.contains('active')) {
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+    } else {
+        icon.classList.remove('fas');
+        icon.classList.add('far');
+    }
 }
 
 // ===================================
@@ -291,6 +371,17 @@ if (featuredPropertiesContainer) {
     featuredPropertiesContainer.innerHTML = featuredProps.map(createPropertyCard).join('');
 }
 
+function scrollCarousel(direction) {
+    const container = document.getElementById('featuredProperties');
+    if (container) {
+        const scrollAmount = 370; // Card width (350) + gap (20 approx)
+        container.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+}
+
 // ===================================
 // SEARCH FUNCTIONALITY
 // ===================================
@@ -298,13 +389,13 @@ function searchProperties() {
     const location = document.getElementById('searchLocation').value.toLowerCase();
     const budget = document.getElementById('searchBudget').value;
     const type = document.getElementById('searchType').value;
-    
+
     // Build query string
     const params = new URLSearchParams();
     if (location) params.append('location', location);
     if (budget) params.append('budget', budget);
     if (type) params.append('type', type);
-    
+
     // Redirect to properties page with filters
     window.location.href = `properties.html?${params.toString()}`;
 }
@@ -328,12 +419,12 @@ document.querySelectorAll('.faq-question').forEach(question => {
     question.addEventListener('click', () => {
         const faqItem = question.parentElement;
         const isActive = faqItem.classList.contains('active');
-        
+
         // Close all FAQs
         document.querySelectorAll('.faq-item').forEach(item => {
             item.classList.remove('active');
         });
-        
+
         // Open clicked FAQ if it wasn't active
         if (!isActive) {
             faqItem.classList.add('active');
@@ -357,7 +448,7 @@ function closeInquiryModal() {
     if (modal) {
         modal.classList.remove('active');
         document.body.style.overflow = 'auto';
-        
+
         // Reset form
         const form = document.getElementById('inquiryForm');
         const successMessage = document.getElementById('successMessage');
@@ -380,27 +471,27 @@ window.addEventListener('click', (e) => {
 // ===================================
 function submitInquiry(event) {
     event.preventDefault();
-    
+
     const name = document.getElementById('inquiryName').value;
     const phone = document.getElementById('inquiryPhone').value;
     const email = document.getElementById('inquiryEmail').value;
     const message = document.getElementById('inquiryMessage').value;
-    
+
     // Simulate form submission
     console.log('Inquiry submitted:', { name, phone, email, message });
-    
+
     // Show success message
     const form = document.getElementById('inquiryForm');
     const successMessage = document.getElementById('successMessage');
-    
+
     form.style.display = 'none';
     successMessage.classList.add('active');
-    
+
     // Close modal after 3 seconds
     setTimeout(() => {
         closeInquiryModal();
     }, 3000);
-    
+
     return false;
 }
 
@@ -431,13 +522,28 @@ const observer = new IntersectionObserver((entries) => {
 // Observe elements for animation
 document.addEventListener('DOMContentLoaded', () => {
     const animateElements = document.querySelectorAll('.property-card, .feature-card, .step-card, .testimonial-card');
-    
+
     animateElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
         el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         observer.observe(el);
     });
+});
+
+// ===================================
+// HERO BACKGROUND SLIDER
+// ===================================
+document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.hero-slide');
+    if (slides.length > 0) {
+        let currentSlide = 0;
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 5000); // Change every 5 seconds
+    }
 });
 
 // ===================================

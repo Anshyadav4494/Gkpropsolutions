@@ -20,31 +20,43 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="preloader.css">
 </head>
 
 <body>
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="loader-content">
+      <img src="image/LOGO.png" alt="Loading..." class="loader-logo">
+      <div class="loader-circle"></div>
+    </div>
+  </div>
+
   <!-- Floating Action Buttons -->
   <div class="floating-buttons">
     <a href="tel:+919876543210" class="float-btn call-btn" aria-label="Call us">
       <i class="fas fa-phone"></i>
     </a>
-    <a href="https://wa.me/919876543210" target="_blank" class="float-btn whatsapp-btn" aria-label="WhatsApp us">
+    <a href="https://wa.me/917351973034" target="_blank" class="float-btn whatsapp-btn" aria-label="WhatsApp us">
       <i class="fab fa-whatsapp"></i>
     </a>
+    <button class="float-btn lead-btn" onclick="openInquiryModal()" aria-label="Quick Enquiry">
+      <i class="fas fa-paper-plane"></i>
+    </button>
   </div>
 
   <!-- Header -->
   <header class="header" id="header">
     <nav class="navbar container">
       <div class="logo">
-        <img src="image/LOGO.png" alt="GK Prop Solution" style="height: 70px; width: auto;">
+        <img src="image/LOGO.png" alt="GK Prop Solutions" style="height: 70px; width: auto;">
       </div>
       <ul class="nav-menu" id="navMenu">
-        <li><a href="#home" class="nav-link active">Home</a></li>
-        <li><a href="#properties" class="nav-link">Properties</a></li>
-        <li><a href="#about" class="nav-link">About</a></li>
-        <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
-        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="properties.html" class="nav-link">Properties</a></li>
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li><a href="index.html#testimonials" class="nav-link">Testimonials</a></li>
+        <li><a href="index.html#contact" class="nav-link">Contact</a></li>
         <li><a href="properties.html" class="btn btn-primary">View All Properties</a></li>
       </ul>
       <div class="hamburger" id="hamburger">
@@ -57,7 +69,25 @@
 
   <!-- Hero Section -->
   <section class="hero" id="home">
-    <div class="hero-overlay"></div>
+    <div class="hero-bg-slider">
+      <!-- Slide 1 -->
+      <div class="hero-slide active"
+        style="background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&h=1080&fit=crop');">
+      </div>
+      <!-- Slide 2 -->
+      <div class="hero-slide"
+        style="background-image: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&h=1080&fit=crop');">
+      </div>
+      <!-- Slide 3 -->
+      <div class="hero-slide"
+        style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&h=1080&fit=crop');">
+      </div>
+      <!-- Slide 4 -->
+      <div class="hero-slide"
+        style="background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&h=1080&fit=crop');">
+      </div>
+    </div>
+    <div class="hero-overlay-gradient"></div>
     <div class="hero-content container">
       <h1 class="hero-title fade-in">Find Your Dream Property</h1>
       <p class="hero-subtitle fade-in">Discover premium real estate investments with expert guidance</p>
@@ -92,19 +122,34 @@
           <i class="fas fa-search"></i> Search
         </button>
       </div>
+
+      <!-- Scroll Indicator -->
+      <a href="#properties" class="scroll-indicator">
+        <i class="fas fa-chevron-down"></i>
+      </a>
     </div>
   </section>
 
   <!-- Featured Properties -->
-  <section class="section" id="properties">
+  <section class="section bg-soft-blue" id="properties">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">Featured Properties</h2>
         <p class="section-subtitle">Handpicked premium properties for you</p>
       </div>
 
-      <div class="properties-grid" id="featuredProperties">
-        <!-- Property cards will be dynamically inserted -->
+      <div class="properties-carousel-container" style="position: relative;">
+        <button class="carousel-btn prev-btn" onclick="scrollCarousel(-1)">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="properties-carousel-wrapper" id="featuredProperties">
+          <!-- Property cards will be dynamically inserted -->
+        </div>
+
+        <button class="carousel-btn next-btn" onclick="scrollCarousel(1)">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
 
       <div class="text-center" style="margin-top: 3rem;">
@@ -114,7 +159,7 @@
   </section>
 
   <!-- Why Choose Us -->
-  <section class="section bg-light" id="about">
+  <section class="section bg-cream" id="about">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">Why Choose Us</h2>
@@ -158,7 +203,7 @@
   </section>
 
   <!-- How It Works -->
-  <section class="section">
+  <section class="section bg-soft-blue">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">How It Works</h2>
@@ -221,7 +266,7 @@
   </section>
 
   <!-- Testimonials -->
-  <section class="section bg-light" id="testimonials">
+  <section class="section bg-cream" id="testimonials">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">What Our Clients Say</h2>
@@ -426,37 +471,52 @@
   <div class="modal" id="inquiryModal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeInquiryModal()">&times;</span>
-      <h2>Send Inquiry</h2>
-      <p>Fill out the form and our team will get back to you within 24 hours</p>
+      <div class="modal-label">Get Professional Advice</div>
+      <h2>Premium Inquiry</h2>
+      <p>Fill out the details below and our property expert will reach out to you shortly.</p>
 
       <form id="inquiryForm" onsubmit="submitInquiry(event)">
-        <div class="form-group">
-          <label for="inquiryName">Full Name *</label>
-          <input type="text" id="inquiryName" required>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="inquiryName">Full Name</label>
+            <div class="form-input-wrapper">
+              <i class="fas fa-user"></i>
+              <input type="text" id="inquiryName" placeholder="Full name" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inquiryPhone">Phone Number</label>
+            <div class="form-input-wrapper">
+              <i class="fas fa-phone"></i>
+              <input type="tel" id="inquiryPhone" pattern="[0-9]{10}" placeholder="Phone number" required>
+            </div>
+          </div>
         </div>
 
         <div class="form-group">
-          <label for="inquiryPhone">Phone Number *</label>
-          <input type="tel" id="inquiryPhone" pattern="[0-9]{10}" required>
-        </div>
-
-        <div class="form-group">
-          <label for="inquiryEmail">Email Address *</label>
-          <input type="email" id="inquiryEmail" required>
+          <label for="inquiryEmail">Email Address</label>
+          <div class="form-input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="inquiryEmail" placeholder="example@email.com" required>
+          </div>
         </div>
 
         <div class="form-group">
           <label for="inquiryMessage">Message</label>
-          <textarea id="inquiryMessage" rows="4" placeholder="Tell us about your requirements..."></textarea>
+          <textarea id="inquiryMessage" rows="4"
+            placeholder="How can we help you? Tell us about your property needs..."></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block">Submit Inquiry</button>
+        <button type="submit" class="btn btn-primary btn-block">Send Inquiry</button>
       </form>
 
       <div class="success-message" id="successMessage">
-        <i class="fas fa-check-circle"></i>
-        <h3>Thank You!</h3>
-        <p>Your inquiry has been submitted successfully. We'll contact you soon.</p>
+        <div class="success-icon">
+          <i class="fas fa-check"></i>
+        </div>
+        <h3>Inquiry Sent Successfully!</h3>
+        <p>Expert consultants will reach out to you within the next 24 hours.</p>
       </div>
     </div>
   </div>

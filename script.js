@@ -264,8 +264,8 @@ window.addEventListener('load', () => {
     if (preloader) {
         setTimeout(() => {
             preloader.classList.add('fade-out');
-            document.body.style.overflow = 'auto'; // Ensure usage
-        }, 1500); // 1.5s delay for effect
+            document.body.style.overflow = 'auto';
+        }, 800); // Reduced from 1500 to 800 for faster felt speed
     }
 });
 
@@ -362,13 +362,17 @@ function toggleWishlist(event, btn) {
     }
 }
 
-// ===================================
-// LOAD FEATURED PROPERTIES (HOME PAGE)
-// ===================================
-const featuredPropertiesContainer = document.getElementById('featuredProperties');
-if (featuredPropertiesContainer) {
-    const featuredProps = properties.filter(p => p.featured).slice(0, 6);
-    featuredPropertiesContainer.innerHTML = featuredProps.map(createPropertyCard).join('');
+// Load featured properties will be called inside DOMContentLoaded for better timing
+function loadFeaturedProperties() {
+    const featuredPropertiesContainer = document.getElementById('featuredProperties');
+    if (featuredPropertiesContainer) {
+        const featuredProps = properties.filter(p => p.featured).slice(0, 6);
+        featuredPropertiesContainer.innerHTML = featuredProps.map(createPropertyCard).join('');
+        // Refresh GSAP ScrollTrigger if it exists
+        if (typeof ScrollTrigger !== 'undefined') {
+            ScrollTrigger.refresh();
+        }
+    }
 }
 
 function scrollCarousel(direction) {
@@ -502,34 +506,7 @@ function viewProperty(id) {
     window.location.href = `property-detail.html?id=${id}`;
 }
 
-// ===================================
-// SCROLL ANIMATIONS
-// ===================================
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe elements for animation
-document.addEventListener('DOMContentLoaded', () => {
-    const animateElements = document.querySelectorAll('.property-card, .feature-card, .step-card, .testimonial-card');
-
-    animateElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
-});
+// (Old IntersectionObserver logic removed to avoid conflict with GSAP)
 
 // ===================================
 // HERO BACKGROUND SLIDER
@@ -590,3 +567,77 @@ if ('loading' in HTMLImageElement.prototype) {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { properties, createPropertyCard };
 }
+
+// ===================================
+// GSAP & LENIS SMOOTH SCROLL
+// ===================================
+document.addEventListener('DOMContentLoaded', () => {
+    // Load properties first
+    loadFeaturedProperties();
+
+    // Initialize Lenis
+    if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+            duration: 1.0, // Faster scroll
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            smoothWheel: true,
+        })
+
+        function raf(time) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
+        }
+
+        requestAnimationFrame(raf)
+
+        // GSAP ScrollTrigger Integration
+        if (typeof ScrollTrigger !== 'undefined') {
+            lenis.on('scroll', ScrollTrigger.update)
+
+            gsap.ticker.add((time) => {
+                lenis.raf(time * 1000)
+            })
+
+            gsap.ticker.lagSmoothing(0)
+
+            // Reveal Animations with GSAP
+            gsap.registerPlugin(ScrollTrigger);
+
+            const revealElements = document.querySelectorAll('.section-title, .section-subtitle, .feature-card, .property-card, .step-card, .testimonial-card, .loc-card');
+
+            revealElements.forEach((el) => {
+                gsap.from(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 90%",
+                        toggleActions: "play none none none" // Removed 'reverse' for performance
+                    },
+                    opacity: 0,
+                    y: 30, // Reduced movement
+                    duration: 0.8, // Faster animation
+                    ease: "power2.out",
+                    force3D: true // Hardware acceleration
+                });
+            });
+
+            // Special entry for the map section
+            if (document.querySelector('.location-card-overlay')) {
+                gsap.from('.location-card-overlay', {
+                    scrollTrigger: {
+                        trigger: '.location-section',
+                        start: "top 70%",
+                    },
+                    x: -100,
+                    opacity: 0,
+                    duration: 1.5,
+                    ease: "power4.out"
+                });
+            }
+        }
+    }
+});
+
+// Sparkles effect removed
+
+

@@ -578,21 +578,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Lenis
     if (typeof Lenis !== 'undefined') {
         const lenis = new Lenis({
-            duration: 1.0, // Faster scroll
+            duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: 'vertical',
             smoothWheel: true,
         })
 
-        function raf(time) {
-            lenis.raf(time)
-            requestAnimationFrame(raf)
-        }
-
-        requestAnimationFrame(raf)
-
         // GSAP ScrollTrigger Integration
         if (typeof ScrollTrigger !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+
             lenis.on('scroll', ScrollTrigger.update)
 
             gsap.ticker.add((time) => {
@@ -602,8 +597,6 @@ document.addEventListener('DOMContentLoaded', () => {
             gsap.ticker.lagSmoothing(0)
 
             // Reveal Animations with GSAP
-            gsap.registerPlugin(ScrollTrigger);
-
             const revealElements = document.querySelectorAll('.section-title, .section-subtitle, .feature-card, .property-card, .step-card, .testimonial-card, .loc-card');
 
             revealElements.forEach((el) => {
@@ -611,13 +604,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     scrollTrigger: {
                         trigger: el,
                         start: "top 90%",
-                        toggleActions: "play none none none" // Removed 'reverse' for performance
+                        toggleActions: "play none none none"
                     },
                     opacity: 0,
-                    y: 30, // Reduced movement
-                    duration: 0.8, // Faster animation
+                    y: 30,
+                    duration: 0.8,
                     ease: "power2.out",
-                    force3D: true // Hardware acceleration
+                    force3D: true
                 });
             });
 
@@ -634,10 +627,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     ease: "power4.out"
                 });
             }
+        } else {
+            // Fallback if ScrollTrigger is not present
+            function raf(time) {
+                lenis.raf(time)
+                requestAnimationFrame(raf)
+            }
+            requestAnimationFrame(raf)
         }
     }
 });
 
 // Sparkles effect removed
-
-

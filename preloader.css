@@ -138,6 +138,18 @@
     animation: spin 1.5s linear infinite;
 }
 
+@media (max-width: 576px) {
+    .loader-logo {
+        width: 120px;
+        /* Reduced for mobile */
+    }
+
+    .loader-circle {
+        width: 180px;
+        height: 180px;
+    }
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);

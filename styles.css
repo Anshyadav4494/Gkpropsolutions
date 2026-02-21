@@ -2216,18 +2216,21 @@ ul {
 
     .search-box {
         flex-direction: column;
-        padding: var(--spacing-md);
+        padding: 1.5rem;
         gap: 1rem;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
     }
 
-    .search-group {
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 1rem;
+    .search-input-group {
+        width: 100%;
+        min-width: unset;
     }
 
-    .search-group:last-child {
-        border-bottom: none;
+    .search-box .btn {
+        width: 100%;
+        justify-content: center;
     }
 
     .features-grid,
@@ -2368,10 +2371,21 @@ ul {
     .cta-buttons {
         flex-direction: column;
         width: 100%;
+        gap: 1rem;
     }
 
     .cta-buttons .btn {
         width: 100%;
+        margin: 0;
+    }
+
+    .hero-bg-slider {
+        display: none;
+        /* Reduce load on mobile */
+    }
+
+    .hero {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&fit=crop') center/cover;
     }
 
     .modal-content {
@@ -2565,13 +2579,46 @@ ul {
 
 @media (max-width: 768px) {
     .location-card-overlay {
-        top: 20px;
-        left: 20px;
-        right: 20px;
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        max-width: 100%;
+        padding: 2rem var(--spacing-md);
+        background: var(--primary-color);
+    }
+
+    .loc-card {
+        border-radius: 0;
+        background: var(--primary-light);
+        color: var(--white);
+        box-shadow: none;
+    }
+
+    .loc-info h3 {
+        color: var(--secondary-color);
+    }
+
+    .loc-info p,
+    .review-count {
+        color: #cbd5e1;
+    }
+
+    .rating-num {
+        color: var(--white);
     }
 
     .map-wrapper {
-        height: 450px;
+        height: 350px;
+    }
+
+    .loc-card-header {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .loc-directions {
+        align-self: flex-start;
     }
 }
 
@@ -2587,4 +2634,28 @@ ul {
 .reveal.active {
     opacity: 1;
     transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+    .loc-card-header {
+        text-align: center;
+        align-items: center;
+    }
+
+    .loc-directions {
+        align-self: center;
+    }
+
+    .qr-code-box {
+        align-self: center;
+        margin-top: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
 }

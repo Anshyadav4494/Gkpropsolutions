@@ -252,9 +252,20 @@ const navMenu = document.getElementById('navMenu');
 
 if (hamburger) {
     hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
+        document.body.classList.toggle('menu-open');
     });
 }
+
+// Close menu when clicking on a link
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        if (hamburger) hamburger.classList.remove('active');
+        if (navMenu) navMenu.classList.remove('active');
+        document.body.classList.remove('menu-open');
+    });
+});
 
 // ===================================
 // PRELOADER
@@ -265,25 +276,18 @@ window.addEventListener('load', () => {
         setTimeout(() => {
             preloader.classList.add('fade-out');
             document.body.style.overflow = 'auto';
-        }, 800); // Reduced from 1500 to 800 for faster felt speed
+        }, 800);
     }
-});
-
-// Close menu when clicking on a link
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-    });
 });
 
 // Sticky header
 window.addEventListener('scroll', () => {
     const header = document.getElementById('header');
     if (header) {
-        if (window.scrollY > 100) {
-            header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
         } else {
-            header.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            header.classList.remove('scrolled');
         }
     }
 });
@@ -319,6 +323,9 @@ function createPropertyCard(property) {
             <div class="property-image">
                 <img src="${property.image}" alt="${property.title}" loading="lazy">
                 <div class="property-badge">${property.badge}</div>
+                <div class="view-details-overlay">
+                    <span class="view-details-btn">View Details</span>
+                </div>
             </div>
             <div class="property-content">
                 <h3 class="property-title">${property.title}</h3>
@@ -337,9 +344,6 @@ function createPropertyCard(property) {
                     <div class="footer-actions">
                         <button class="wishlist-btn" onclick="toggleWishlist(event, this)" title="Add to Wishlist">
                             <i class="far fa-heart"></i>
-                        </button>
-                        <button class="btn btn-primary" onclick="event.stopPropagation(); openInquiryModal()">
-                            Inquire
                         </button>
                     </div>
                 </div>
@@ -597,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gsap.ticker.lagSmoothing(0)
 
             // Reveal Animations with GSAP
-            const revealElements = document.querySelectorAll('.section-title, .section-subtitle, .feature-card, .property-card, .step-card, .testimonial-card, .loc-card');
+            const revealElements = document.querySelectorAll('.section-title, .section-subtitle, .feature-card, .property-card, .testimonial-card, .loc-card');
 
             revealElements.forEach((el) => {
                 gsap.from(el, {
